@@ -1,0 +1,4 @@
+/target/
+/databse/
+/.idea/
+/src/main/resources/.env
