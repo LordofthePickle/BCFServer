@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.exceptions;
+package com.opensourcebim.bcfserver.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.auth;
+package com.opensourcebim.bcfserver.auth;
 
 public class JWTUtils {
 }

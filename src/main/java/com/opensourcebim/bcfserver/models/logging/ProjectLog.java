@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.models.logging;
+package com.opensourcebim.bcfserver.models.logging;
 
 public class ProjectLog {
 }

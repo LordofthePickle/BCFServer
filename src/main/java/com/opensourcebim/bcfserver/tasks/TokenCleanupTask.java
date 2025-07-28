@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.tasks;
+package com.opensourcebim.bcfserver.tasks;
 
 public class TokenCleanupTask {
 }

@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.services;
+package com.opensourcebim.bcfserver.services;
 
 public class ProjectService {
 }

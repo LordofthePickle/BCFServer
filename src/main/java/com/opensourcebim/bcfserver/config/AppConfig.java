@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.config;
+package com.opensourcebim.bcfserver.config;
 
 public class AppConfig {
 }

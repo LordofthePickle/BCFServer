@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.cache;
+package com.opensourcebim.bcfserver.cache;
 
 public class DiskCacheManagerImpl {
 }

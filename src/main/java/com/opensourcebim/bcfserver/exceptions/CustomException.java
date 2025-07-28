@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.exceptions;
+package com.opensourcebim.bcfserver.exceptions;
 
 public class CustomException extends RuntimeException {
     public CustomException(String message) {

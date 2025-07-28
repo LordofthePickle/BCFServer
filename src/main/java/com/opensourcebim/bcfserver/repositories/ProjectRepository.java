@@ -1,4 +1,4 @@
-package main.java.com.opensourcebim.bcfserver.repositories;
+package com.opensourcebim.bcfserver.repositories;
 
 public class ProjectRepository {
 }
