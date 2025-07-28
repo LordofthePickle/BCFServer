@@ -61,7 +61,7 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-        <!-- Liquibase (comment out Flyway above if you use this instead) -->
+        <!-- Liquibase  -->
         <!--
         <dependency>
             <groupId>org.liquibase</groupId>
