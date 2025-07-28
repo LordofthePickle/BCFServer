@@ -100,7 +100,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- thatOpen (IFC importer) and Node.js: Not a Java dependency; document its installation in README.md -->
+        <!-- thatOpen (IFC importer) and Node.js: Not a Java dependency; -->
     </dependencies>
 
     <build>
