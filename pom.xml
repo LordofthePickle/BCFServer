@@ -61,7 +61,7 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-        <!-- Liquibase (comment out Flyway above if you use this instead) -->
+        <!-- Liquibase  -->
         <!--
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -101,7 +101,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- thatOpen (IFC importer) and Node.js: Not a Java dependency; document its installation in README.md -->
+        <!-- thatOpen (IFC importer) and Node.js: Not a Java dependency; -->
     </dependencies>
 
     <repositories>
