@@ -5,6 +5,8 @@ import com.opensourcebim.bcfserver.models.enums.Schema;
 import com.opensourcebim.bcfserver.models.logging.LogAction;
 import com.opensourcebim.bcfserver.models.logging.ProjectLog;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -18,27 +20,47 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long poid;
 
+    @NotNull
+    @Size(min = 3, max = 50)
+    @Column(nullable = false, unique = true)
     private String name;
 
+    @NotNull
+    @Column(nullable = false)
     private LocalDateTime creationTime;
 
+    @NotNull
     @OneToOne(mappedBy = "project")
     private User createdBy;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private LengthMeasurePrefix measurementUnit;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Schema schema;
 
+    @NotNull
     @Embedded
+    @Column(nullable = false)
     private ProjectLog projectlog;
 
+    @NotNull
     @Embedded
+    @Column(nullable = false)
     private Path filePath;
 
+    @NotNull
     @ManyToMany(mappedBy = "accessibleProjects")
+    @Column(nullable = false)
     private List<User> accessingUsers;
 
+    @NotNull
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false)
     private List<Comment> comments;
 
     //Methods

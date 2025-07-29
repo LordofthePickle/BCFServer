@@ -1,6 +1,7 @@
 package com.opensourcebim.bcfserver.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -12,20 +13,31 @@ public class Fragment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long foid;
 
+    @NotNull
+    @Column(nullable = false)
     private long expressValue;
 
+    @NotNull
+    @Column(nullable = false)
     private String ifcType;
 
+    @NotNull
+    @Column(nullable = false)
     private String name;
 
+    @NotNull
     @Embedded
+    @Column(nullable = false)
     private Path geometryPath; //for caching JSON files
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "poid")
+    @JoinColumn(name = "poid", nullable = false)
     private Project project;
 
+    @NotNull
     @OneToMany(mappedBy = "fragment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false)
     private List<IFCProperty> properties;
 
     //Methods

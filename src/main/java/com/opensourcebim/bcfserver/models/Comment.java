@@ -1,6 +1,7 @@
 package com.opensourcebim.bcfserver.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -11,16 +12,22 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long coid;
 
+    @NotNull
+    @Column(length = 1024, nullable = false)
     private String text;
 
+    @NotNull
+    @Column(nullable = false)
     private LocalDateTime creationTime;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uoid")
+    @JoinColumn(name = "uoid", nullable = false)
     private User createdBy;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "poid")
+    @JoinColumn(name = "poid", nullable = false)
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)

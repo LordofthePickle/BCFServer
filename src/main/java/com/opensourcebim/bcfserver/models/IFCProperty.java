@@ -1,6 +1,7 @@
 package com.opensourcebim.bcfserver.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class IFCProperty {
@@ -9,13 +10,17 @@ public class IFCProperty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long propoid;
 
+    @NotNull
+    @Column(nullable = false)
     private String name;
 
-    @Column(length = 1024)
+    @NotNull
+    @Column(length = 1024, nullable = false)
     private String value;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "foid")
+    @JoinColumn(name = "foid", nullable = false)
     private Fragment fragment;
 
     //Methods
