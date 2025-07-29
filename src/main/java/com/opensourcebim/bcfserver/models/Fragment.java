@@ -3,7 +3,6 @@ package com.opensourcebim.bcfserver.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.nio.file.Path;
 import java.util.List;
 
 @Entity
@@ -26,9 +25,8 @@ public class Fragment {
     private String name;
 
     @NotNull
-    @Embedded
     @Column(nullable = false)
-    private Path geometryPath; //for caching JSON files
+    private String geometryPath; //for caching JSON files
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,7 +40,7 @@ public class Fragment {
 
     //Methods
     public Fragment(){}
-    public Fragment(long expressValue, String ifcType, String name, Path geometryPath, Project project, List<IFCProperty> properties) {
+    public Fragment(long expressValue, String ifcType, String name, String geometryPath, Project project, List<IFCProperty> properties) {
         this.expressValue = expressValue;
         this.ifcType = ifcType;
         this.name = name;
@@ -63,7 +61,7 @@ public class Fragment {
     public String getName() {
         return name;
     }
-    public Path getGeometryPath() {
+    public String getGeometryPath() {
         return geometryPath;
     }
     public Project getProject() {

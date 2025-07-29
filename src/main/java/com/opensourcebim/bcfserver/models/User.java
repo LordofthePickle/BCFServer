@@ -32,7 +32,6 @@ public class User {
     @Column(nullable = false)
     private UserType userType;
 
-    @NotNull
     @Embedded
     @Column(nullable = false)
     private UserLog userlog;
@@ -48,20 +47,23 @@ public class User {
 
     private LocalDateTime lastLoginTime;
 
-    @NotNull
-    @OneToOne(mappedBy = "createdBy")
+    @ManyToOne
+    @JoinColumn(name = "created_by_uoid")
     private User createdBy;
 
-    @NotNull
+    @OneToMany(mappedBy = "createdBy")
+    private List<User> createdUsers;
+
+    @OneToMany(mappedBy = "createdBy")
+    private List<Project> createdProjects;
+
     @ManyToMany
     @JoinTable(name = "user_project_access",
             joinColumns = @JoinColumn(name = "uoid", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "poid", nullable = false))
     private List<Project> accessibleProjects;
 
-    @NotNull
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(nullable = false)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     //Methods
@@ -78,6 +80,9 @@ public class User {
         this.accessibleProjects = new ArrayList<>();
         this.comments = new ArrayList<>();
         this.userlog = new UserLog();
+        this.lastLoginTime = null;
+        this.createdProjects = new ArrayList<>();
+        this.createdUsers = new ArrayList<>();
     }
 
     public Long getUoid() {

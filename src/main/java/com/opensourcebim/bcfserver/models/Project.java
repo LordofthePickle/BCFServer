@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,8 @@ public class Project {
     @Column(nullable = false)
     private LocalDateTime creationTime;
 
-    @NotNull
-    @OneToOne(mappedBy = "project")
+    @ManyToOne
+    @JoinColumn(name = "created_by_uoid", nullable = false)
     private User createdBy;
 
     @NotNull
@@ -43,31 +42,24 @@ public class Project {
     @Column(nullable = false)
     private Schema schema;
 
-    @NotNull
     @Embedded
     @Column(nullable = false)
     private ProjectLog projectlog;
 
-    @NotNull
-    @Embedded
     @Column(nullable = false)
-    private Path filePath;
+    private String filePath;
 
-    @NotNull
     @ManyToMany(mappedBy = "accessibleProjects")
-    @Column(nullable = false)
     private List<User> accessingUsers;
 
-    @NotNull
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(nullable = false)
     private List<Comment> comments;
 
     //Methods
     public Project() {
         /*Default constructor*/
     }
-    public Project(String name, User createdBy, LengthMeasurePrefix measurementUnit, Schema schema, Path filePath) {
+    public Project(String name, User createdBy, LengthMeasurePrefix measurementUnit, Schema schema, String filePath) {
         this.name = name;
         this.creationTime = LocalDateTime.now();
         this.createdBy = createdBy;
@@ -100,7 +92,7 @@ public class Project {
     public Schema getSchema() {
         return schema;
     }
-    public Path getFilePath() {
+    public String getFilePath() {
         return filePath;
     }
     public ProjectLog getProjectlog() {
