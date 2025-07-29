@@ -109,6 +109,9 @@ public class User {
         this.userType = userType;
         return true;
     }
+    public String getPassword() {
+        return null; //TODO: stub
+    }
     /*
     public byte[] getPasswordHash(){
         TODO: stub
