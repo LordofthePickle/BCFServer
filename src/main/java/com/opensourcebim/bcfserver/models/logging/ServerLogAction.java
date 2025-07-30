@@ -42,18 +42,23 @@ public class ServerLogAction {
     public Long getLoid() {
         return loid;
     }
+
     public LocalDateTime getTime() {
         return time;
     }
+
     public LogType getLogType() {
         return logType;
     }
+
     public Project getProject() {
         return project;
     }
+
     public User getUser() {
         return user;
     }
+
     public Comment getComment() {
         return comment;
     }

@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface UserService {
 
+    //Retrieval
+
     Optional<User> getUserByUsername(String username);
 
     boolean existsByUsername(String username);
-
-    User registerUser(User user);
 
     Optional<User> getUserByEmail(String email);
 
@@ -23,4 +23,12 @@ public interface UserService {
     List<User> getUsersByType(UserType userType);
 
     Page<User> getAllUsers(Pageable pageable);
+
+    //Creation
+
+    User registerUser(User user);
+
+    //Modification
+
+
 }

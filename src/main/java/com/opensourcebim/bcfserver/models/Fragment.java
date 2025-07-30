@@ -52,21 +52,27 @@ public class Fragment {
     public Long getFoid() {
         return foid;
     }
+
     public long getExpressValue() {
         return expressValue;
     }
+
     public String getIfcType() {
         return ifcType;
     }
+
     public String getName() {
         return name;
     }
+
     public String getGeometryPath() {
         return geometryPath;
     }
+
     public Project getProject() {
         return project;
     }
+
     public List<IFCProperty> getProperties() {
         return properties;
     }

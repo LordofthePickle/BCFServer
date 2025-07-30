@@ -96,23 +96,20 @@ public class User {
     public String getUsername() {
         return username;
     }
-    public boolean setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
-        return true;
     }
     public String getToken() {
         return token;
     }
-    public boolean setToken(String token) {
+    public void setToken(String token) {
         this.token = token;
-        return true;
     }
     public UserType getUserType() {
         return userType;
     }
-    public boolean setUserType(UserType userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
-        return true;
     }
     public String getPassword() {
         return null; //TODO: stub
@@ -129,9 +126,8 @@ public class User {
     public String getEmail() {
         return email;
     }
-    public boolean setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
-        return true;
     }
     public LocalDateTime getCreationTime() {
         return creationTime;
@@ -145,31 +141,26 @@ public class User {
     public User getCreatedBy() {
         return createdBy;
     }
-    public boolean addLog(LogType action){
+    public void addLog(LogType action){
        // return this.userlog.addLog(action); TODO: stub
-        return true;
     }
     public List<Project> getAccessibleProjects() {
         return accessibleProjects;
     }
-    public boolean addProject(Project project) {
+    public void addProject(Project project) {
         this.accessibleProjects.add(project);
-        return true;
     }
-    public boolean removeProject(Project project) {
-        this.accessibleProjects.remove(project);
-        return true;
+    public void removeProject(Project project) {
+        accessibleProjects.remove(project);
     }
     public List<Comment> getComments() {
         return comments;
     }
-    public boolean addComment(Comment comment) {
+    public void addComment(Comment comment) {
         this.comments.add(comment);
-        return true;
     }
-    public boolean removeComment(Comment comment) {
-        this.comments.remove(comment);
-        return true;
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
     }
 
 }

@@ -68,52 +68,59 @@ public class Project {
     public Long getPoid() {
         return poid;
     }
+
     public String getName() {
         return name;
     }
-    public boolean setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
-        return true;
     }
+
     public LocalDateTime getCreationTime() {
         return creationTime;
     }
+
     public User getCreatedBy() {
         return createdBy;
     }
+
     public LengthMeasurePrefix getMeasurementUnit() {
         return measurementUnit;
     }
+
     public Schema getSchema() {
         return schema;
     }
+
     public String getFilePath() {
         return filePath;
     }
-    public boolean addLog(LogType action){
+
+    public void addLog(LogType action){
         //return projectlog.addLog(action); TODO: stub
-        return true;
     }
+
     public List<User> getAccessingUsers() {
         return accessingUsers;
     }
-    public boolean addUser(User user){
+
+    public void addUser(User user){
         this.accessingUsers.add(user);
-        return true;
     }
-    public boolean removeUser(User user){
+
+    public void removeUser(User user){
         this.accessingUsers.remove(user);
-        return true;
     }
+
     public List<Comment> getComments() {
         return comments;
     }
-    public boolean addComment(Comment comment) {
+    public void addComment(Comment comment) {
         this.comments.add(comment);
-        return true;
     }
-    public boolean removeComment(Comment comment) {
+
+    public void removeComment(Comment comment) {
         this.comments.remove(comment);
-        return true;
     }
 }

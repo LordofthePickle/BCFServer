@@ -25,17 +25,21 @@ public class IFCProperty {
 
     //Methods
     public IFCProperty(){}
+
     public IFCProperty(Fragment fragment, String name, String value) {
         this.fragment = fragment;
         this.name = name;
         this.value = value;
     }
+
     public Long getPropoid() {
         return propoid;
     }
+
     public String getName() {
         return name;
     }
+
     public String getValue() {
         return value;
     }
