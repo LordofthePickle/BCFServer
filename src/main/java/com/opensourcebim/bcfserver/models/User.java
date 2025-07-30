@@ -1,8 +1,7 @@
 package com.opensourcebim.bcfserver.models;
 
 import com.opensourcebim.bcfserver.models.enums.UserType;
-import com.opensourcebim.bcfserver.models.logging.LogAction;
-import com.opensourcebim.bcfserver.models.logging.UserLog;
+import com.opensourcebim.bcfserver.models.enums.LogType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -31,10 +30,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType userType;
-
-    @Embedded
-    @Column(nullable = false)
-    private UserLog userlog;
 
     @NotNull
     @Email
@@ -79,7 +74,6 @@ public class User {
         this.createdBy = this;
         this.accessibleProjects = new ArrayList<>();
         this.comments = new ArrayList<>();
-        this.userlog = new UserLog();
     }
 
     public User(String username, String email, String password, UserType userType, String token, User createdBy) {
@@ -91,7 +85,6 @@ public class User {
         this.createdBy = createdBy;
         this.accessibleProjects = new ArrayList<>();
         this.comments = new ArrayList<>();
-        this.userlog = new UserLog();
         this.lastLoginTime = null;
         this.createdProjects = new ArrayList<>();
         this.createdUsers = new ArrayList<>();
@@ -152,10 +145,7 @@ public class User {
     public User getCreatedBy() {
         return createdBy;
     }
-    public UserLog getUserlog() {
-        return userlog;
-    }
-    public boolean addLog(LogAction action){
+    public boolean addLog(LogType action){
        // return this.userlog.addLog(action); TODO: stub
         return true;
     }

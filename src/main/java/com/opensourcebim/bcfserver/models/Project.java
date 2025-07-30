@@ -2,8 +2,7 @@ package com.opensourcebim.bcfserver.models;
 
 import com.opensourcebim.bcfserver.models.enums.LengthMeasurePrefix;
 import com.opensourcebim.bcfserver.models.enums.Schema;
-import com.opensourcebim.bcfserver.models.logging.LogAction;
-import com.opensourcebim.bcfserver.models.logging.ProjectLog;
+import com.opensourcebim.bcfserver.models.enums.LogType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -42,10 +41,6 @@ public class Project {
     @Column(nullable = false)
     private Schema schema;
 
-    @Embedded
-    @Column(nullable = false)
-    private ProjectLog projectlog;
-
     @Column(nullable = false)
     private String filePath;
 
@@ -68,8 +63,8 @@ public class Project {
         this.filePath = filePath;
         this.accessingUsers = new ArrayList<>();
         this.comments = new ArrayList<>();
-        this.projectlog = new ProjectLog();
     }
+
     public Long getPoid() {
         return poid;
     }
@@ -95,10 +90,7 @@ public class Project {
     public String getFilePath() {
         return filePath;
     }
-    public ProjectLog getProjectlog() {
-        return projectlog;
-    }
-    public boolean addLog(LogAction action){
+    public boolean addLog(LogType action){
         //return projectlog.addLog(action); TODO: stub
         return true;
     }
