@@ -5,6 +5,7 @@ import com.opensourcebim.bcfserver.dtos.LoginRequestDTO;
 import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.repositories.UserRepository;
+import com.opensourcebim.bcfserver.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,13 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTService jwtService, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
+    public AuthController(UserService userService, PasswordEncoder passwordEncoder, JWTService jwtService, AuthenticationManager authenticationManager) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -34,12 +35,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request){
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userService.existsByUsername(request.getUsername())) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
         User user = new User(request.getUsername(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getUserType());
 
-        userRepository.save(user);
+        userService.registerUser(user);
 
         return ResponseEntity.ok("User registered successfully");
     }
