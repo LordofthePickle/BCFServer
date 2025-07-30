@@ -34,14 +34,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request){
-        if (userService.existsByUsername(request.getUsername())) {
-            return ResponseEntity.badRequest().body("Username is already taken");
-        }
-        User user = new User(request.getUsername(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getUserType());
-
-        userService.registerUser(user);
-
+    public ResponseEntity<?> register(@RequestBody RegisterRequestDTO request){
+        userService.registerUser(request);
         return ResponseEntity.ok("User registered successfully");
     }
 

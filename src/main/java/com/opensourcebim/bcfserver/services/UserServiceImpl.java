@@ -1,13 +1,16 @@
 package com.opensourcebim.bcfserver.services;
 
+import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
 import com.opensourcebim.bcfserver.repositories.UserRepository;
 import com.opensourcebim.bcfserver.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +20,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //GETTERS
@@ -56,7 +61,23 @@ public class UserServiceImpl implements UserService {
     //CREATION
 
     @Override
-    public User registerUser(User user) {
+    public User registerUser(RegisterRequestDTO request) {
+        if (!ValidationUtils.isValidEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+
+        if (!ValidationUtils.isValidUsername(request.getUsername())) {
+            throw new IllegalArgumentException("Invalid username");
+        }
+
+        if (existsByUsername(request.getUsername())) {
+            throw new IllegalArgumentException("Username already taken");
+        }
+
+        if (!ValidationUtils.isStrongPassword((String) request.getPassword())) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long, include uppercase, lowercase, and digits.");
+        }
+        User user = new User(request.getUsername(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getUserType());
         return userRepository.save(user);
     }
 

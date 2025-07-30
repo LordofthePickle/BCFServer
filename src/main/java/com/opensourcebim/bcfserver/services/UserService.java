@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.services;
 
+import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public interface UserService {
 
     //Creation
 
-    User registerUser(User user);
+    User registerUser(RegisterRequestDTO registerRequestDTO);
 
     //Modification
 
