@@ -30,5 +30,5 @@ public interface UserService {
 
     //Modification
 
-
+    void updateEmailForLoggedInUser(String email);
 }
