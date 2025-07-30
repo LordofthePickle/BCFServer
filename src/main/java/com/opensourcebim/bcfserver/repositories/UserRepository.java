@@ -1,12 +1,11 @@
 package com.opensourcebim.bcfserver.repositories;
 
 import com.opensourcebim.bcfserver.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.lang.ScopedValue;
 import java.util.Optional;
 
-public class UserRepository {
-    public Optional<User> findByUsername(String username) {
-        return null; //TODO: stub
-    }
+public interface UserRepository extends JpaRepository<User, Long> {
+   Optional<User> findByUsername(String username);
+   boolean existsByUsername(String username);
 }

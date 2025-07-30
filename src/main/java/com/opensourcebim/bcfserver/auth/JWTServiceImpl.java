@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Service
 public class JWTServiceImpl implements JWTService {
 
-    private final String SECRET_KEY = "your-secret-key";
+    private final String SECRET_KEY = "some secret key";
 
     private long expirationMs = 1000 * 60 * 60 * 24;
 

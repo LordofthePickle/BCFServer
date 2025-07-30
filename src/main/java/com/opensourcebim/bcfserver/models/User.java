@@ -70,7 +70,19 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, UserType userType, String token, User createdBy) {
+    public User(String username, String email, String password, UserType userType){
+        this.username = username;
+        this.email = email;
+        this.userType = userType;
+        this.creationTime = LocalDateTime.now();
+        this.token = null;
+        this.createdBy = this;
+        this.accessibleProjects = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.userlog = new UserLog();
+    }
+
+    public User(String username, String email, String password, UserType userType, String token, User createdBy) {
         this.username = username;
         this.email = email;
         this.userType = userType;
