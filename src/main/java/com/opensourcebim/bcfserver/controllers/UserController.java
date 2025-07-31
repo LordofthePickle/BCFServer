@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.controllers;
 
+import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
 import com.opensourcebim.bcfserver.dtos.UserDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.services.UserService;
@@ -31,8 +32,8 @@ public class UserController {
 
     @PutMapping("/email")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateUserEmail(@RequestBody String newEmail, @RequestBody UserDTO user) {
-        userService.updateEmailForUser(newEmail);
+    public ResponseEntity<?> updateUserEmail(@RequestBody EmailUpdateForUserRequestDTO request) {
+        userService.updateEmailForUser(request);
         return ResponseEntity.ok().build();
     }
 }

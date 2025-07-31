@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.services;
 
+import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
 import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
@@ -76,7 +77,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateEmailForUser(String email, User user) {
+    public void updateEmailForUser(EmailUpdateForUserRequestDTO request) {
+        User user = userRepository.findById(request.getUser().getUoid()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String email = request.getEmail();
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");
         }
