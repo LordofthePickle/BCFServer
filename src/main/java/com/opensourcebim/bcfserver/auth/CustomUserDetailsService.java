@@ -19,7 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    // This method is called by Spring Security when trying to authenticate a user
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = (User) userRepository.findByUsername(username)

@@ -58,7 +58,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "poid", nullable = false))
     private List<Project> accessibleProjects;
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     //Methods
