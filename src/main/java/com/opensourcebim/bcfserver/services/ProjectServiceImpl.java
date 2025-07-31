@@ -1,4 +1,23 @@
 package com.opensourcebim.bcfserver.services;
 
-public class ProjectServiceImpl {
+import com.opensourcebim.bcfserver.models.Project;
+import com.opensourcebim.bcfserver.repositories.ProjectRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProjectServiceImpl implements ProjectService {
+
+    private final ProjectRepository projectRepository;
+
+
+    public ProjectServiceImpl(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
+
+    @Override
+    public Page<Project> getAllProjects(Pageable pageable) {
+        return projectRepository.findAll(pageable);
+    }
 }

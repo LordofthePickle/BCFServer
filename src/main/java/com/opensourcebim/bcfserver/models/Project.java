@@ -34,7 +34,7 @@ public class Project {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LengthMeasurePrefix measurementUnit;
+    private LengthMeasurePrefix lengthMeasurePrefix;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -58,7 +58,7 @@ public class Project {
         this.name = name;
         this.creationTime = LocalDateTime.now();
         this.createdBy = createdBy;
-        this.measurementUnit = measurementUnit;
+        this.lengthMeasurePrefix = measurementUnit;
         this.schema = schema;
         this.filePath = filePath;
         this.accessingUsers = new ArrayList<>();
@@ -85,8 +85,8 @@ public class Project {
         return createdBy;
     }
 
-    public LengthMeasurePrefix getMeasurementUnit() {
-        return measurementUnit;
+    public LengthMeasurePrefix getLengthMeasurePrefix() {
+        return lengthMeasurePrefix;
     }
 
     public Schema getSchema() {

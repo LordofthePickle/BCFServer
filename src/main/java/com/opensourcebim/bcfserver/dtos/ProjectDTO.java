@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.dtos;
 
+import com.opensourcebim.bcfserver.models.Project;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.LengthMeasurePrefix;
 import com.opensourcebim.bcfserver.models.enums.Schema;
@@ -10,6 +11,17 @@ public class ProjectDTO {
     private LengthMeasurePrefix lengthMeasurePrefix;
     private Schema schema;
     private String filePath;
+
+    public static ProjectDTO from(Project project) {
+        ProjectDTO dto = new ProjectDTO();
+        dto.name = project.getName();
+        dto.createdBy = project.getCreatedBy();
+        dto.lengthMeasurePrefix = project.getLengthMeasurePrefix();
+        dto.schema = project.getSchema();
+        dto.filePath = project.getFilePath();
+        return dto;
+    }
+
 
     public String getName() {
         return name;
