@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.services;
 
+import com.opensourcebim.bcfserver.dtos.ProjectDTO;
 import com.opensourcebim.bcfserver.models.Project;
 import com.opensourcebim.bcfserver.repositories.ProjectRepository;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Page<Project> getAllProjects(Pageable pageable) {
-        return projectRepository.findAll(pageable);
+    public Page<ProjectDTO> getAllProjects(Pageable pageable) {
+        Page<Project> projectsPage = projectRepository.findAll(pageable);
+        return projectsPage.map(ProjectDTO::from);
     }
 }
