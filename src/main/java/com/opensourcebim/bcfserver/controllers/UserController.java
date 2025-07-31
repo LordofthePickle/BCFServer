@@ -1,7 +1,6 @@
 package com.opensourcebim.bcfserver.controllers;
 
 import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
-import com.opensourcebim.bcfserver.dtos.UserDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

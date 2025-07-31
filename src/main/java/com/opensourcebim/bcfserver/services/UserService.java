@@ -1,7 +1,7 @@
 package com.opensourcebim.bcfserver.services;
 
 import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
-import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
+import com.opensourcebim.bcfserver.dtos.ProjectDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
 import org.springframework.data.domain.Page;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    //Retrieval
+    //Getters
 
     User getCurrentUser();
 
@@ -27,6 +27,8 @@ public interface UserService {
     List<User> getUsersByType(UserType userType);
 
     Page<User> getAllUsers(Pageable pageable);
+
+    List<ProjectDTO> getAllProjectsForCurrentUser();
 
     //Modification
 

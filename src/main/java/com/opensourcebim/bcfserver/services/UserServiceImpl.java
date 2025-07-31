@@ -1,7 +1,7 @@
 package com.opensourcebim.bcfserver.services;
 
 import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
-import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
+import com.opensourcebim.bcfserver.dtos.ProjectDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
 import com.opensourcebim.bcfserver.repositories.UserRepository;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +19,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     //GETTERS
@@ -62,6 +59,11 @@ public class UserServiceImpl implements UserService {
 
     public Page<User> getAllUsers(Pageable pageable){
         return userRepository.findAll(pageable);
+    }
+
+    public List<ProjectDTO> getAllProjectsForCurrentUser (){
+        User user = getCurrentUser();
+        return user.getAccessibleProjects().stream().map(ProjectDTO::from).toList();
     }
 
     //MODIFIERS
