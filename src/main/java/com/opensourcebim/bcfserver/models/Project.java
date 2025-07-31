@@ -123,4 +123,9 @@ public class Project {
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

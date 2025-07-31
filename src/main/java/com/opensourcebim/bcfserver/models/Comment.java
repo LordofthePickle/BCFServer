@@ -73,6 +73,10 @@ public class Comment {
         return createdBy;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     public Fragment getFragment() {
         return fragment;
     }

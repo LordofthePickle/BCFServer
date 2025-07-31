@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return Optional.ofNullable(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(STR."User, \{username} not found")));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateEmailForUser(EmailUpdateForUserRequestDTO request) {
-        User user = userRepository.findById(request.getUser().getUoid()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = getUserByUsername(request.getUsername()).get();
         String email = request.getEmail();
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");

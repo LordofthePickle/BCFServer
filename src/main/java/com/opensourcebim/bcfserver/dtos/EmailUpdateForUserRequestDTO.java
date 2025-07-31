@@ -4,12 +4,12 @@ public class EmailUpdateForUserRequestDTO {
 
     private String email;
 
-    private UserDTO user;
+    private String username;
 
     public String getEmail() {
         return email;
     }
-    public UserDTO getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 }

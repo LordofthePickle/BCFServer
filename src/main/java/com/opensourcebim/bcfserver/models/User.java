@@ -141,6 +141,12 @@ public class User {
     public User getCreatedBy() {
         return createdBy;
     }
+    public List<User> getCreatedUsers() {
+        return createdUsers;
+    }
+    public void addCreatedUser(User user) {
+        createdUsers.add(user);
+    }
     public void addLog(LogType action){
        // return this.userlog.addLog(action); TODO: stub
     }
@@ -153,6 +159,12 @@ public class User {
     public void removeProject(Project project) {
         accessibleProjects.remove(project);
     }
+    public List<Project> getCreatedProjects() {
+        return createdProjects;
+    }
+    public void addCreatedProject(Project project) {
+        createdProjects.add(project);
+    }
     public List<Comment> getComments() {
         return comments;
     }
@@ -163,4 +175,8 @@ public class User {
         comments.remove(comment);
     }
 
+    @Override
+    public String toString(){
+        return username;
+    }
 }

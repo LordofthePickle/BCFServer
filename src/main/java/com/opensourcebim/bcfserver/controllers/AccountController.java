@@ -23,7 +23,7 @@ public class AccountController {
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser() {
         User user = userService.getCurrentUser();
-        return ResponseEntity.ok(new UserDTO(user));
+        return ResponseEntity.ok(UserDTO.from(user));
     }
 
     @GetMapping("/email")
