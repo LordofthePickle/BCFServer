@@ -3,6 +3,7 @@ package com.opensourcebim.bcfserver.controllers;
 import com.opensourcebim.bcfserver.auth.JWTService;
 import com.opensourcebim.bcfserver.dtos.LoginRequestDTO;
 import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
+import com.opensourcebim.bcfserver.services.AuthService;
 import com.opensourcebim.bcfserver.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,33 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(UserService userService, JWTService jwtService, AuthenticationManager authenticationManager) {
-        this.userService = userService;
+    public AuthController(AuthService authService, JWTService jwtService, AuthenticationManager authenticationManager) {
+        this.authService = authService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDTO request){
-        userService.registerUser(request);
+        authService.registerUser(request);
         return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDTO request){
-        try {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    request.getUsername(), request.getPassword()
-            );
-            authenticationManager.authenticate(authentication);
-            String token = jwtService.generateToken(request.getUsername());
-            return ResponseEntity.ok(token);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        }
+        return ResponseEntity.ok(authService.loginUser(request));
     }
 }

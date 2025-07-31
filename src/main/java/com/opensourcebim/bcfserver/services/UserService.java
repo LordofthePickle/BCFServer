@@ -13,6 +13,8 @@ public interface UserService {
 
     //Retrieval
 
+    User getCurrentUser();
+
     Optional<User> getUserByUsername(String username);
 
     boolean existsByUsername(String username);
@@ -25,11 +27,9 @@ public interface UserService {
 
     Page<User> getAllUsers(Pageable pageable);
 
-    //Creation
-
-    User registerUser(RegisterRequestDTO registerRequestDTO);
-
     //Modification
 
     void updateEmailForLoggedInUser(String email);
+
+    void updateEmailForUser(String email, User user);
 }

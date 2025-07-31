@@ -7,7 +7,6 @@ import com.opensourcebim.bcfserver.repositories.UserRepository;
 import com.opensourcebim.bcfserver.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +27,12 @@ public class UserServiceImpl implements UserService {
     }
 
     //GETTERS
+
+    @Override
+    public User getCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(STR."User not found: \{username}"));
+    }
 
     @Override
     public Optional<User> getUserByUsername(String username) {
@@ -58,29 +63,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(pageable);
     }
 
-    //CREATION
-
-    @Override
-    public User registerUser(RegisterRequestDTO request) {
-        if (!ValidationUtils.isValidEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Invalid email format");
-        }
-
-        if (!ValidationUtils.isValidUsername(request.getUsername())) {
-            throw new IllegalArgumentException("Invalid username");
-        }
-
-        if (existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("Username already taken");
-        }
-
-        if (!ValidationUtils.isStrongPassword((String) request.getPassword())) {
-            throw new IllegalArgumentException("Password must be at least 8 characters long, include uppercase, lowercase, and digits.");
-        }
-        User user = new User(request.getUsername(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getUserType());
-        return userRepository.save(user);
-    }
-
     //MODIFIERS
 
     @Override
@@ -88,8 +70,16 @@ public class UserServiceImpl implements UserService {
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");
         }
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(STR."User not found: \{username}"));
+        User user = getCurrentUser();
+        user.setEmail(email);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateEmailForUser(String email, User user) {
+        if (!ValidationUtils.isValidEmail(email)){
+            throw new IllegalArgumentException("Invalid email");
+        }
         user.setEmail(email);
         userRepository.save(user);
     }
