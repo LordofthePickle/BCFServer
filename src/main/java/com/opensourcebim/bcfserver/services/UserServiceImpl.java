@@ -1,6 +1,5 @@
 package com.opensourcebim.bcfserver.services;
 
-import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
 import com.opensourcebim.bcfserver.dtos.ProjectDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
@@ -53,6 +52,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> getUserByUoid(Long uoid){
+        return userRepository.findByUoid(uoid);
+    }
+
+    @Override
     public List<User> getUsersByType(UserType userType){
         return userRepository.findByUserType(userType);
     }
@@ -79,9 +83,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateEmailForUser(EmailUpdateForUserRequestDTO request) {
-        User user = getUserByUsername(request.getUsername()).get();
-        String email = request.getEmail();
+    public void updateEmailForUser(Long uoid, String email) {
+        User user = getUserByUoid(uoid).get();
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");
         }

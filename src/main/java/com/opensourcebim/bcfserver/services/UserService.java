@@ -1,6 +1,5 @@
 package com.opensourcebim.bcfserver.services;
 
-import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
 import com.opensourcebim.bcfserver.dtos.ProjectDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
@@ -24,6 +23,8 @@ public interface UserService {
 
     boolean existsByEmail(String email);
 
+    Optional<User> getUserByUoid(Long uoid);
+
     List<User> getUsersByType(UserType userType);
 
     Page<User> getAllUsers(Pageable pageable);
@@ -34,5 +35,5 @@ public interface UserService {
 
     void updateEmailForLoggedInUser(String email);
 
-    void updateEmailForUser(EmailUpdateForUserRequestDTO request);
+    void updateEmailForUser(Long uoid, String email);
 }

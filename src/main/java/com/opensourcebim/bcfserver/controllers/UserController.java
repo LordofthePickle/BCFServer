@@ -1,6 +1,5 @@
 package com.opensourcebim.bcfserver.controllers;
 
-import com.opensourcebim.bcfserver.dtos.EmailUpdateForUserRequestDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +28,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
-    @PutMapping("/email")
+    @PutMapping("/{uoid}/email")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateUserEmail(@RequestBody EmailUpdateForUserRequestDTO request) {
-        userService.updateEmailForUser(request);
+    public ResponseEntity<?> updateUserEmail(@PathVariable Long uoid, @RequestBody String email) {
+        userService.updateEmailForUser(uoid, email);
         return ResponseEntity.ok().build();
     }
 }
