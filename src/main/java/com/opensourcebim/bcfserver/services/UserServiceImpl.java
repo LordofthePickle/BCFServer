@@ -8,7 +8,6 @@ import com.opensourcebim.bcfserver.repositories.UserRepository;
 import com.opensourcebim.bcfserver.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,19 +20,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthService authService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authService = authService;
     }
 
     //GETTERS
-
-    @Override
-    public User getCurrentUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(STR."User not found: \{username}"));
-    }
 
     @Override
     public Optional<User> getUserByUsername(String username) {
@@ -70,7 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<ProjectDTO> getAllProjectsForCurrentUser (){
-        User user = getCurrentUser();
+        User user = authService.getCurrentUser();
         return user.getAccessibleProjects().stream().map(ProjectDTO::from).toList();
     }
 
@@ -81,7 +76,7 @@ public class UserServiceImpl implements UserService {
         if (!ValidationUtils.isValidUsername(username)){
             throw new IllegalArgumentException("Invalid username");
         }
-        User user = getCurrentUser();
+        User user = authService.getCurrentUser();
         user.setUsername(username);
         userRepository.save(user);
     }
@@ -91,21 +86,21 @@ public class UserServiceImpl implements UserService {
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");
         }
-        User user = getCurrentUser();
+        User user = authService.getCurrentUser();
         user.setEmail(email);
         userRepository.save(user);
     }
 
     @Override
     public void updatePasswordForLoggedInUser(PasswordChangeDTO request) {
-        String currentUserPassword = getCurrentUser().getPassword();
+        String currentUserPassword = authService.getCurrentUser().getPassword();
         if (!passwordEncoder.matches(request.getOldPassword(), currentUserPassword)){
             throw new IllegalArgumentException("Incorrect Old Password");
         }
         if (!ValidationUtils.isStrongPassword(request.getNewPassword())){
             throw new IllegalArgumentException("Invalid password");
         }
-        User user = getCurrentUser();
+        User user = authService.getCurrentUser();
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }

@@ -14,8 +14,6 @@ public interface UserService {
 
     //Getters
 
-    User getCurrentUser();
-
     Optional<User> getUserByUsername(String username);
 
     boolean existsByUsername(String username);

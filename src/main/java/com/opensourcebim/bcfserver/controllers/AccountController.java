@@ -3,6 +3,8 @@ package com.opensourcebim.bcfserver.controllers;
 import com.opensourcebim.bcfserver.dtos.PasswordChangeDTO;
 import com.opensourcebim.bcfserver.dtos.UserDTO;
 import com.opensourcebim.bcfserver.models.User;
+import com.opensourcebim.bcfserver.services.AuthService;
+import com.opensourcebim.bcfserver.services.AuthServiceImpl;
 import com.opensourcebim.bcfserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public AccountController(UserService userService) {
+    public AccountController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     //Getters
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser() {
-        User user = userService.getCurrentUser();
+        User user = authService.getCurrentUser();
         return ResponseEntity.ok(UserDTO.from(user));
     }
 

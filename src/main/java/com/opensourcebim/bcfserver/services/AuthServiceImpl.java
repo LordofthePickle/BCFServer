@@ -1,16 +1,25 @@
 package com.opensourcebim.bcfserver.services;
 
 import com.opensourcebim.bcfserver.auth.JWTService;
+import com.opensourcebim.bcfserver.dtos.ForgotPasswordDTO;
 import com.opensourcebim.bcfserver.dtos.LoginRequestDTO;
+import com.opensourcebim.bcfserver.dtos.PasswordResetDTO;
 import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
 import com.opensourcebim.bcfserver.exceptions.AuthException;
+import com.opensourcebim.bcfserver.exceptions.EmailNotFoundException;
+import com.opensourcebim.bcfserver.exceptions.TokenExpiredException;
+import com.opensourcebim.bcfserver.models.PasswordResetToken;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.repositories.UserRepository;
+import com.opensourcebim.bcfserver.repositories.resetTokenRepository;
+import com.opensourcebim.bcfserver.utils.TokenUtils;
 import com.opensourcebim.bcfserver.utils.ValidationUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +31,17 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+    private final resetTokenRepository resetTokenRepository;
+    private final EmailService emailService;
 
-    public AuthServiceImpl(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService) {
+    public AuthServiceImpl(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService, resetTokenRepository resetTokenRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.resetTokenRepository = resetTokenRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -64,5 +77,44 @@ public class AuthServiceImpl implements AuthService {
         catch (Exception e) {
             throw new AuthException("Invalid credentials");
         }
+    }
+
+    @Override
+    public void forgotPassword(ForgotPasswordDTO request) {
+        String email = request.getEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException(STR."User not found: \{email}"));
+
+        PasswordResetToken resetToken = new PasswordResetToken(user);
+        resetTokenRepository.save(resetToken);
+
+        emailService.sendResetEmail(user.getEmail(), resetToken.getToken());
+    }
+
+    @Override
+    public void resetPassword(PasswordResetDTO request) {
+        PasswordResetToken token = resetTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new AuthException("Invalid token"));
+        if (token.isExpired()) {
+            throw new TokenExpiredException("Token expired");
+        }
+
+        User user = token.getUser();
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        resetTokenRepository.delete(token);
+    }
+
+    @Override
+    public boolean isUserLoggedIn() {
+        return true;
+        // return jwtService.isLoggedIn(); TODO: implement this method
+    }
+
+    @Override
+    public User getCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(STR."User not found: \{username}"));
     }
 }
