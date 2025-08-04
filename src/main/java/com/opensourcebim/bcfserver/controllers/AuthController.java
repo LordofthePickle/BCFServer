@@ -20,13 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final JWTService jwtService;
-    private final AuthenticationManager authenticationManager;
 
-    public AuthController(AuthService authService, JWTService jwtService, AuthenticationManager authenticationManager) {
+
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
