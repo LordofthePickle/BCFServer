@@ -1,4 +1,4 @@
-package com.opensourcebim.bcfserver.auth;
+package com.opensourcebim.bcfserver.auth.services;
 
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.repositories.UserRepository;

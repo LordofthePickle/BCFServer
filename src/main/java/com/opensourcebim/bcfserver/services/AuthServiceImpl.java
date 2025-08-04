@@ -1,6 +1,6 @@
 package com.opensourcebim.bcfserver.services;
 
-import com.opensourcebim.bcfserver.auth.JWTService;
+import com.opensourcebim.bcfserver.auth.services.JWTService;
 import com.opensourcebim.bcfserver.dtos.ForgotPasswordDTO;
 import com.opensourcebim.bcfserver.dtos.LoginRequestDTO;
 import com.opensourcebim.bcfserver.dtos.PasswordResetDTO;

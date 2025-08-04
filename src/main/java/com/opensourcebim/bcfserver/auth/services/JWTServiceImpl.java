@@ -1,8 +1,9 @@
-package com.opensourcebim.bcfserver.auth;
+package com.opensourcebim.bcfserver.auth.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,17 @@ import java.util.function.Function;
 @Service
 public class JWTServiceImpl implements JWTService {
 
-    private final String SECRET_KEY = "some secret key";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
 
-    private long expirationMs = 1000 * 60 * 60 * 24;
+    @Value("${jwt.expiration:86400000}")
+    private long expirationMs;
 
     @Override
-    public String generateToken(String username) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        claims.put("role", userDetails.getAuthorities().stream().findFirst().get().getAuthority());
+        return createToken(claims, userDetails.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -51,6 +55,11 @@ public class JWTServiceImpl implements JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    private long getExpirationMillis(String token) {
+        Date expiration = extractExpiration(token);
+        return expiration.getTime() - System.currentTimeMillis();
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

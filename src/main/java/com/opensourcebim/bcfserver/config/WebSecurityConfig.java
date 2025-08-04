@@ -1,6 +1,6 @@
 package com.opensourcebim.bcfserver.config;
 
-import com.opensourcebim.bcfserver.auth.CustomUserDetailsService;
+import com.opensourcebim.bcfserver.auth.services.CustomUserDetailsService;
 import com.opensourcebim.bcfserver.auth.JWTAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

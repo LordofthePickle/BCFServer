@@ -1,11 +1,15 @@
 package com.opensourcebim.bcfserver.auth;
 
+import com.opensourcebim.bcfserver.auth.services.CustomUserDetailsService;
+import com.opensourcebim.bcfserver.auth.services.JWTServiceImpl;
+import com.opensourcebim.bcfserver.auth.services.RedisTokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,10 +21,15 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTServiceImpl jwtServiceImpl;
     private final CustomUserDetailsService userDetailsService;
+    private final RedisTokenBlacklistService redisTokenBlacklistService;
 
-    public JWTAuthenticationFilter(JWTServiceImpl jwtService, CustomUserDetailsService userDetailsService) {
+    public JWTAuthenticationFilter(JWTServiceImpl jwtService,
+                                   CustomUserDetailsService userDetailsService,
+                                   RedisTokenBlacklistService redisTokenBlacklistService)
+    {
         this.jwtServiceImpl = jwtService;
         this.userDetailsService = userDetailsService;
+        this.redisTokenBlacklistService = redisTokenBlacklistService;
     }
 
     @Override
@@ -39,8 +48,22 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        jwt = authHeader.substring(7); // Remove "Bearer "
-        username = jwtServiceImpl.extractUsername(jwt); // JWT must contain username/email
+        jwt = authHeader.substring(7);
+
+        if (redisTokenBlacklistService.isBlacklisted(jwt)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("Token has been blacklisted");
+            return;
+        }
+
+        try{
+            username = jwtServiceImpl.extractUsername(jwt);
+        } catch (JwtException ex) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("Invalid token");
+            return;
+        }
+
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = userDetailsService.loadUserByUsername(username);
