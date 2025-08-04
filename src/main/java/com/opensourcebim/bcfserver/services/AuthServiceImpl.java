@@ -1,6 +1,8 @@
 package com.opensourcebim.bcfserver.services;
 
+import com.opensourcebim.bcfserver.auth.services.CustomUserDetailsService;
 import com.opensourcebim.bcfserver.auth.services.JWTService;
+import com.opensourcebim.bcfserver.auth.services.RedisTokenBlacklistService;
 import com.opensourcebim.bcfserver.dtos.ForgotPasswordDTO;
 import com.opensourcebim.bcfserver.dtos.LoginRequestDTO;
 import com.opensourcebim.bcfserver.dtos.PasswordResetDTO;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,15 +29,19 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final UserService userService;
+    private final CustomUserDetailsService userDetailsService;
+    private final RedisTokenBlacklistService redisTokenBlacklistService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
     private final resetTokenRepository resetTokenRepository;
     private final EmailService emailService;
 
-    public AuthServiceImpl(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService, resetTokenRepository resetTokenRepository, EmailService emailService) {
+    public AuthServiceImpl(UserRepository userRepository, UserService userService, CustomUserDetailsService userDetailsService, RedisTokenBlacklistService redisTokenBlacklistService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService, resetTokenRepository resetTokenRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.userDetailsService = userDetailsService;
+        this.redisTokenBlacklistService = redisTokenBlacklistService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
@@ -70,10 +77,25 @@ public class AuthServiceImpl implements AuthService {
                     request.getUsername(), request.getPassword()
             );
             authenticationManager.authenticate(authentication);
-            return jwtService.generateToken(request.getUsername());
+            return jwtService.generateToken(userDetailsService.loadUserByUsername(request.getUsername()));
         }
         catch (Exception e) {
             throw new AuthException("Invalid credentials");
+        }
+    }
+
+    @Override
+    public void logoutUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String token = jwtService.extractToken(auth);
+
+        if (auth != null && auth.getAuthorities() != null) {
+            boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+            if (isAdmin) {
+                long expirationMillis = jwtService.getExpirationMillis(token);
+                redisTokenBlacklistService.blacklistToken(token, expirationMillis);
+            }
         }
     }
 
@@ -101,12 +123,6 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
         resetTokenRepository.delete(token);
-    }
-
-    @Override
-    public boolean isUserLoggedIn() {
-        return true;
-        // return jwtService.isLoggedIn(); TODO: implement this method
     }
 
     @Override

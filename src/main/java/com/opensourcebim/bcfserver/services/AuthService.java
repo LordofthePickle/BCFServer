@@ -12,11 +12,11 @@ public interface AuthService {
 
     String loginUser(LoginRequestDTO request);
 
+    void logoutUser();
+
     void forgotPassword(ForgotPasswordDTO request);
 
     void resetPassword(PasswordResetDTO request);
-
-    boolean isUserLoggedIn();
 
     User getCurrentUser();
 }

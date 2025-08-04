@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -53,11 +54,26 @@ public class JWTServiceImpl implements JWTService {
         return extractExpiration(token).before(new Date());
     }
 
+    public String extractToken(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated() ) {
+            return null;
+        }
+
+        Object details = authentication.getDetails();
+
+        if (authentication.getCredentials() instanceof String token) {
+            return token;
+        }
+
+        return null;
+    }
+
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private long getExpirationMillis(String token) {
+    @Override
+    public long getExpirationMillis(String token) {
         Date expiration = extractExpiration(token);
         return expiration.getTime() - System.currentTimeMillis();
     }

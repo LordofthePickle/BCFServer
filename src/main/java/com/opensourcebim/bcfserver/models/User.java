@@ -31,8 +31,6 @@ public class User {
     @JsonIgnore
     private String password;
 
-    private String token;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -78,19 +76,17 @@ public class User {
         this.userType = userType;
         this.password = password;
         this.creationTime = LocalDateTime.now();
-        this.token = null;
         this.createdBy = this;
         this.accessibleProjects = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 
-    public User(String username, String email, String password, UserType userType, String token, User createdBy) {
+    public User(String username, String email, String password, UserType userType, User createdBy) {
         this.username = username;
         this.email = email;
         this.userType = userType;
         this.password = password;
         this.creationTime = LocalDateTime.now();
-        this.token = token;
         this.createdBy = createdBy;
         this.accessibleProjects = new ArrayList<>();
         this.comments = new ArrayList<>();
@@ -107,12 +103,6 @@ public class User {
     }
     public void setUsername(String username) {
         this.username = username;
-    }
-    public String getToken() {
-        return token;
-    }
-    public void setToken(String token) {
-        this.token = token;
     }
     public UserType getUserType() {
         return userType;

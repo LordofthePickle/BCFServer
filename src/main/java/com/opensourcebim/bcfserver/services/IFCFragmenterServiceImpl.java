@@ -1,4 +1,4 @@
 package com.opensourcebim.bcfserver.services;
 
-public interface IFCFragmenterService {
+public class IFCFragmenterServiceImpl {
 }

@@ -34,7 +34,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(/* TODO: add DTO and finish function */){
+    public ResponseEntity<?> logout(){
+        authService.logoutUser();
         return ResponseEntity.ok("Logged out successfully");
     }
 
