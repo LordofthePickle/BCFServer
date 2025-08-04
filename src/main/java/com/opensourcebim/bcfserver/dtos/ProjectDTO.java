@@ -12,6 +12,8 @@ public class ProjectDTO {
     private Schema schema;
     private String filePath;
 
+    public ProjectDTO() {}
+
     public static ProjectDTO from(Project project) {
         ProjectDTO dto = new ProjectDTO();
         dto.name = project.getName();
@@ -37,5 +39,18 @@ public class ProjectDTO {
     }
     public String getFilePath() {
         return filePath;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+    public void setLengthMeasurePrefix(LengthMeasurePrefix lengthMeasurePrefix) {
+        this.lengthMeasurePrefix = lengthMeasurePrefix;
+    }
+    public void setSchema(Schema schema) {
+        this.schema = schema;
     }
 }

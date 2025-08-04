@@ -11,6 +11,7 @@ public class CommentDTO {
     private Long foid;
     private String projectName;
 
+    public CommentDTO() {}
     public static CommentDTO from(Comment comment) {
         CommentDTO dto = new CommentDTO();
         dto.commentText = comment.getText();
@@ -37,4 +38,16 @@ public class CommentDTO {
         return projectName;
     }
 
+    public void setCommentText(String commentText) {
+        this.commentText = commentText;
+    }
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+    public void setFragment(Long foid) {
+        this.foid = foid;
+    }
+    public void setProject(String projectName) {
+        this.projectName = projectName;
+    }
 }

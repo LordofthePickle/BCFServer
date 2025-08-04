@@ -8,6 +8,8 @@ public class RegisterRequestDTO {
     private String email;
     private UserType userType;
 
+    public RegisterRequestDTO() {}
+
     public String getUsername() {
         return username;
     }
@@ -22,5 +24,18 @@ public class RegisterRequestDTO {
 
     public UserType getUserType() {
         return userType;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }

@@ -17,6 +17,8 @@ public class UserDTO {
     private List<String> createdProjects;
     private List<CommentDTO> createdComments;
 
+    public UserDTO() {}
+
     public static UserDTO from(User user) {
         UserDTO dto = new UserDTO();
         dto.username = user.getUsername();
@@ -55,4 +57,28 @@ public class UserDTO {
         return createdComments;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+    public void setCreationTime(String creationTime) {
+        this.creationTime = creationTime;
+    }
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+    public void setCreatedUsers(List<String> createdUsers) {
+        this.createdUsers = createdUsers;
+    }
+    public void setCreatedProjects(List<String> createdProjects) {
+        this.createdProjects = createdProjects;
+    }
+    public void setCreatedComments(List<CommentDTO> createdComments) {
+        this.createdComments = createdComments;
+    }
 }
