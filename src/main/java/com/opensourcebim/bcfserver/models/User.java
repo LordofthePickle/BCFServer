@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.opensourcebim.bcfserver.models.enums.UserType;
 import com.opensourcebim.bcfserver.models.enums.LogType;
 import jakarta.persistence.*;
@@ -23,6 +24,12 @@ public class User {
     @Size(min = 3, max = 50)
     @Column(nullable = false, unique = true)
     private String username;
+
+    @NotNull
+    @Size(min = 8, max = 100)
+    @Column(nullable = false)
+    @JsonIgnore
+    private String password;
 
     private String token;
 
@@ -69,6 +76,7 @@ public class User {
         this.username = username;
         this.email = email;
         this.userType = userType;
+        this.password = password;
         this.creationTime = LocalDateTime.now();
         this.token = null;
         this.createdBy = this;
@@ -80,6 +88,7 @@ public class User {
         this.username = username;
         this.email = email;
         this.userType = userType;
+        this.password = password;
         this.creationTime = LocalDateTime.now();
         this.token = token;
         this.createdBy = createdBy;
@@ -112,17 +121,11 @@ public class User {
         this.userType = userType;
     }
     public String getPassword() {
-        return null; //TODO: stub
+        return password;
     }
-    /*
-    public byte[] getPasswordHash(){
-        TODO: stub
+    public void setPassword(String password) {
+        this.password = password;
     }
-
-   public byte[] getPasswordSalt(){
-        TODO: stub
-   }
-   */
     public String getEmail() {
         return email;
     }

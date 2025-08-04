@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.services;
 
+import com.opensourcebim.bcfserver.dtos.PasswordChangeDTO;
 import com.opensourcebim.bcfserver.dtos.ProjectDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +20,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //GETTERS
@@ -73,12 +77,36 @@ public class UserServiceImpl implements UserService {
     //MODIFIERS
 
     @Override
+    public void updateUsernameForLoggedInUser(String username) {
+        if (!ValidationUtils.isValidUsername(username)){
+            throw new IllegalArgumentException("Invalid username");
+        }
+        User user = getCurrentUser();
+        user.setUsername(username);
+        userRepository.save(user);
+    }
+
+    @Override
     public void updateEmailForLoggedInUser(String email) {
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");
         }
         User user = getCurrentUser();
         user.setEmail(email);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updatePasswordForLoggedInUser(PasswordChangeDTO request) {
+        String currentUserPassword = getCurrentUser().getPassword();
+        if (!passwordEncoder.matches(request.getOldPassword(), currentUserPassword)){
+            throw new IllegalArgumentException("Incorrect Old Password");
+        }
+        if (!ValidationUtils.isStrongPassword(request.getNewPassword())){
+            throw new IllegalArgumentException("Invalid password");
+        }
+        User user = getCurrentUser();
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
 

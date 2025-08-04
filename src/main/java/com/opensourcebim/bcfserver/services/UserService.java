@@ -1,5 +1,6 @@
 package com.opensourcebim.bcfserver.services;
 
+import com.opensourcebim.bcfserver.dtos.PasswordChangeDTO;
 import com.opensourcebim.bcfserver.dtos.ProjectDTO;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
@@ -33,7 +34,11 @@ public interface UserService {
 
     //Modification
 
+    void updateUsernameForLoggedInUser(String newUsername);
+
     void updateEmailForLoggedInUser(String email);
+
+    void updatePasswordForLoggedInUser(PasswordChangeDTO request);
 
     void updateEmailForUser(Long uoid, String email);
 }
