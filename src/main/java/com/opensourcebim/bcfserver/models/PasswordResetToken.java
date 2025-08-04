@@ -1,7 +1,7 @@
 package com.opensourcebim.bcfserver.models;
 
 import jakarta.persistence.*;
-import com.opensourcebim.bcfserver.utils.TokenUtils;
+import com.opensourcebim.bcfserver.utils.PasswordResetTokenUtils;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +25,7 @@ public class PasswordResetToken {
     }
 
     public PasswordResetToken(User user) {
-        this.token = TokenUtils.generateToken();
+        this.token = PasswordResetTokenUtils.generateToken();
         this.user = user;
         this.expiryDate = LocalDateTime.now().plusMinutes(15);
     }
