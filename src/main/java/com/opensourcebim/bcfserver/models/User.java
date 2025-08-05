@@ -52,9 +52,11 @@ public class User {
     private User createdBy;
 
     @OneToMany(mappedBy = "createdBy")
+    @OrderBy("creationTime DESC")
     private List<User> createdUsers;
 
     @OneToMany(mappedBy = "createdBy")
+    @OrderBy("creationTime DESC")
     private List<Project> createdProjects;
 
     @ManyToMany
@@ -64,6 +66,7 @@ public class User {
     private List<Project> accessibleProjects;
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    @OrderBy("creationTime DESC")
     private List<Comment> comments;
 
     //Methods

@@ -45,9 +45,11 @@ public class Project {
     private String filePath;
 
     @ManyToMany(mappedBy = "accessibleProjects")
+    @OrderBy("creationTime DESC")
     private List<User> accessingUsers;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("creationTime DESC")
     private List<Comment> comments;
 
     //Methods

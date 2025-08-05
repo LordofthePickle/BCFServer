@@ -34,6 +34,8 @@ public class AccountController {
         return ResponseEntity.ok(UserDTO.from(user));
     }
 
+    /* TODO: could add direct methods for getting user information (though it's not necessary) */
+
     //Setters
 
     @PutMapping("/me/updateUsername")
