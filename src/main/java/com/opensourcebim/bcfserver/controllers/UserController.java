@@ -4,20 +4,15 @@ import com.opensourcebim.bcfserver.dtos.CreationTimeDTO;
 import com.opensourcebim.bcfserver.dtos.CreationTimeRangeDTO;
 import com.opensourcebim.bcfserver.dtos.PageRequestDTO;
 import com.opensourcebim.bcfserver.dtos.user.*;
-import com.opensourcebim.bcfserver.models.User;
-import com.opensourcebim.bcfserver.models.enums.UserType;
 import com.opensourcebim.bcfserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/users")
@@ -106,7 +101,10 @@ public class UserController {
 
     //Putters
 
-    @PutMapping("/{uoid}/email")
+
+    //Patchers
+
+    @PatchMapping("/{uoid}/email")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUserEmail(@PathVariable Long uoid, @RequestBody String email) {
         userService.updateEmailForUser(uoid, email);

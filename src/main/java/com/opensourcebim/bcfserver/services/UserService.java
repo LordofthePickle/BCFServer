@@ -39,7 +39,7 @@ public interface UserService {
 
     Page<UserDTO> getAllUsers(Pageable pageable);
 
-    List<ProjectDTO> getAllProjectsForCurrentUser();
+    Page<ProjectDTO> getAllProjectsForCurrentUser(Pageable pageable);
 
     //Modification
 

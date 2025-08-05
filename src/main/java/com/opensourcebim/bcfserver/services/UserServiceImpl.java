@@ -9,6 +9,7 @@ import com.opensourcebim.bcfserver.exceptions.IdNotFoundException;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
 import com.opensourcebim.bcfserver.repositories.UserRepository;
+import com.opensourcebim.bcfserver.utils.PaginationUtils;
 import com.opensourcebim.bcfserver.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -101,14 +102,16 @@ public class UserServiceImpl implements UserService {
         return userPage.map(UserDTO::from);
     }
 
+    @Override
     public Page<UserDTO> getAllUsers(Pageable pageable){
         Page<User> userPage = userRepository.findAll(pageable);
         return userPage.map(UserDTO::from);
     }
 
-    public List<ProjectDTO> getAllProjectsForCurrentUser (){
+    @Override
+    public Page<ProjectDTO> getAllProjectsForCurrentUser (Pageable pageable){
         User user = authService.getCurrentUser();
-        return user.getAccessibleProjects().stream().map(ProjectDTO::from).toList();
+        return PaginationUtils.paginate(user.getCreatedProjects(), pageable).map(ProjectDTO::from);
     }
 
     //MODIFIERS

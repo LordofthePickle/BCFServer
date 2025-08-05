@@ -36,7 +36,8 @@ public class ProjectController {
     }
 
     @GetMapping("/myProjects")
-    public ResponseEntity<List<ProjectDTO>> getProjectsForCurrentUser() {
-        return ResponseEntity.ok(userService.getAllProjectsForCurrentUser());
+    public ResponseEntity<Page<ProjectDTO>> getProjectsForCurrentUser(@ModelAttribute PageRequestDTO request) {
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        return ResponseEntity.ok(userService.getAllProjectsForCurrentUser(pageable));
     }
 }
