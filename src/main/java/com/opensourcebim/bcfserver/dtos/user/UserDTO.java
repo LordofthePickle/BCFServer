@@ -1,5 +1,6 @@
-package com.opensourcebim.bcfserver.dtos;
+package com.opensourcebim.bcfserver.dtos.user;
 
+import com.opensourcebim.bcfserver.dtos.comment.CommentDTO;
 import com.opensourcebim.bcfserver.models.Project;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserDTO {
+    private Long uoid;
     private String username;
     private String email;
     private UserType userType;
@@ -21,6 +23,7 @@ public class UserDTO {
 
     public static UserDTO from(User user) {
         UserDTO dto = new UserDTO();
+        dto.uoid = user.getUoid();
         dto.username = user.getUsername();
         dto.email = user.getEmail();
         dto.userType = user.getUserType();
@@ -32,6 +35,9 @@ public class UserDTO {
         return dto;
     }
 
+    public Long getUoid() {
+        return uoid;
+    }
     public String getUsername() {
         return username;
     }
@@ -57,6 +63,9 @@ public class UserDTO {
         return createdComments;
     }
 
+    public void setUoid(Long uoid) {
+        this.uoid = uoid;
+    }
     public void setUsername(String username) {
         this.username = username;
     }

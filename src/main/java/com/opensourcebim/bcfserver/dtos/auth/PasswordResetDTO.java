@@ -1,4 +1,4 @@
-package com.opensourcebim.bcfserver.dtos;
+package com.opensourcebim.bcfserver.dtos.auth;
 
 public class PasswordResetDTO {
     private String token;

@@ -1,7 +1,10 @@
 package com.opensourcebim.bcfserver.services;
 
-import com.opensourcebim.bcfserver.dtos.PasswordChangeDTO;
-import com.opensourcebim.bcfserver.dtos.ProjectDTO;
+import com.opensourcebim.bcfserver.dtos.CreationTimeDTO;
+import com.opensourcebim.bcfserver.dtos.user.*;
+import com.opensourcebim.bcfserver.dtos.project.ProjectDTO;
+import com.opensourcebim.bcfserver.exceptions.EmailNotFoundException;
+import com.opensourcebim.bcfserver.exceptions.IdNotFoundException;
 import com.opensourcebim.bcfserver.models.User;
 import com.opensourcebim.bcfserver.models.enums.UserType;
 import com.opensourcebim.bcfserver.repositories.UserRepository;
@@ -13,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,8 +33,10 @@ public class UserServiceImpl implements UserService {
     //GETTERS
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
-        return Optional.ofNullable(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(STR."User, \{username} not found")));
+    public UserDTO getUserByUsername(UsernameDTO request) {
+        String username = request.getUsername();
+        return UserDTO.from(userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(STR."User, \{username}, not found")));
     }
 
     @Override
@@ -41,8 +45,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserDTO getUserByEmail(EmailDTO request) {
+        String email = request.getEmail();
+        return UserDTO.from(userRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException(STR."User with email: \{email} not found")));
     }
 
     @Override
@@ -51,8 +57,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserByUoid(Long uoid){
-        return userRepository.findByUoid(uoid);
+    public UserDTO getUserByUoid(UoidDTO request){
+        Long uoid = request.getUoid();
+        return UserDTO.from(userRepository.findByUoid(uoid)
+                .orElseThrow(() -> new IdNotFoundException(STR."User with uoid: \{uoid} not found")));
+
+    }
+
+    @Override
+    public User getUserByUoid(Long uoid){
+        return userRepository.findByUoid(uoid)
+                .orElseThrow(() -> new IdNotFoundException(STR."User with uoid: \{uoid} not found"));
     }
 
     @Override
@@ -60,8 +75,28 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserType(userType);
     }
 
-    public Page<User> getAllUsers(Pageable pageable){
-        return userRepository.findAll(pageable);
+    @Override
+    public Page<UserDTO> getUsersByType(UserTypeDTO request, Pageable pageable){
+        UserType userType = request.getUserType();
+        Page<User> userPage = userRepository.findByUserType(userType, pageable);
+        return userPage.map(UserDTO::from);
+    }
+
+    @Override
+    public Page<UserDTO> getUsersByCreationTimeAfter(CreationTimeDTO request, Pageable pageable) {
+        Page<User> userPage = userRepository.findByCreationTimeAfter(request.getCreationTime(), pageable);
+        return userPage.map(UserDTO::from);
+    }
+
+    @Override
+    public Page<UserDTO> getUsersByCreationTimeBefore(CreationTimeDTO request, Pageable pageable){
+        Page<User> userPage = userRepository.findByCreationTimeBefore(request.getCreationTime(), pageable);
+        return userPage.map(UserDTO::from);
+    }
+
+    public Page<UserDTO> getAllUsers(Pageable pageable){
+        Page<User> userPage = userRepository.findAll(pageable);
+        return userPage.map(UserDTO::from);
     }
 
     public List<ProjectDTO> getAllProjectsForCurrentUser (){
@@ -72,7 +107,8 @@ public class UserServiceImpl implements UserService {
     //MODIFIERS
 
     @Override
-    public void updateUsernameForLoggedInUser(String username) {
+    public void updateUsernameForLoggedInUser(UsernameDTO request) {
+        String username = request.getUsername();
         if (!ValidationUtils.isValidUsername(username)){
             throw new IllegalArgumentException("Invalid username");
         }
@@ -82,7 +118,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateEmailForLoggedInUser(String email) {
+    public void updateEmailForLoggedInUser(EmailDTO request) {
+        String email = request.getEmail();
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");
         }
@@ -92,7 +129,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePasswordForLoggedInUser(PasswordChangeDTO request) {
+    public void updatePasswordForLoggedInUser(UpdatePasswordDTO request) {
         String currentUserPassword = authService.getCurrentUser().getPassword();
         if (!passwordEncoder.matches(request.getOldPassword(), currentUserPassword)){
             throw new IllegalArgumentException("Incorrect Old Password");
@@ -107,7 +144,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateEmailForUser(Long uoid, String email) {
-        User user = getUserByUoid(uoid).get();
+        User user = getUserByUoid(uoid);
         if (!ValidationUtils.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email");
         }

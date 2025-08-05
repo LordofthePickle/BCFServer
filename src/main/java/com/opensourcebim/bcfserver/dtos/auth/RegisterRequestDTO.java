@@ -1,4 +1,4 @@
-package com.opensourcebim.bcfserver.dtos;
+package com.opensourcebim.bcfserver.dtos.auth;
 
 import com.opensourcebim.bcfserver.models.enums.UserType;
 

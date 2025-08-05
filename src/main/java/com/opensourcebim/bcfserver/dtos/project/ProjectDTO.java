@@ -1,4 +1,4 @@
-package com.opensourcebim.bcfserver.dtos;
+package com.opensourcebim.bcfserver.dtos.project;
 
 import com.opensourcebim.bcfserver.models.Project;
 import com.opensourcebim.bcfserver.models.User;

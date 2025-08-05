@@ -1,11 +1,11 @@
-package com.opensourcebim.bcfserver.dtos;
+package com.opensourcebim.bcfserver.dtos.user;
 
-public class PasswordChangeDTO {
+public class UpdatePasswordDTO {
     private String oldPassword;
     private String newPassword;
 
 
-    public PasswordChangeDTO() {}
+    public UpdatePasswordDTO() {}
 
     public String getOldPassword() {
         return oldPassword;

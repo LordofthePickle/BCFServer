@@ -1,9 +1,9 @@
 package com.opensourcebim.bcfserver.controllers;
 
-import com.opensourcebim.bcfserver.dtos.ForgotPasswordDTO;
-import com.opensourcebim.bcfserver.dtos.LoginRequestDTO;
-import com.opensourcebim.bcfserver.dtos.PasswordResetDTO;
-import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
+import com.opensourcebim.bcfserver.dtos.auth.ForgotPasswordDTO;
+import com.opensourcebim.bcfserver.dtos.auth.LoginRequestDTO;
+import com.opensourcebim.bcfserver.dtos.auth.PasswordResetDTO;
+import com.opensourcebim.bcfserver.dtos.auth.RegisterRequestDTO;
 import com.opensourcebim.bcfserver.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,9 +1,9 @@
 package com.opensourcebim.bcfserver.services;
 
-import com.opensourcebim.bcfserver.dtos.ForgotPasswordDTO;
-import com.opensourcebim.bcfserver.dtos.LoginRequestDTO;
-import com.opensourcebim.bcfserver.dtos.PasswordResetDTO;
-import com.opensourcebim.bcfserver.dtos.RegisterRequestDTO;
+import com.opensourcebim.bcfserver.dtos.auth.ForgotPasswordDTO;
+import com.opensourcebim.bcfserver.dtos.auth.LoginRequestDTO;
+import com.opensourcebim.bcfserver.dtos.auth.PasswordResetDTO;
+import com.opensourcebim.bcfserver.dtos.auth.RegisterRequestDTO;
 import com.opensourcebim.bcfserver.models.User;
 
 public interface AuthService {

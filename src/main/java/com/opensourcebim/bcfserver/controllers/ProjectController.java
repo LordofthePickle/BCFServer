@@ -1,7 +1,7 @@
 package com.opensourcebim.bcfserver.controllers;
 
-import com.opensourcebim.bcfserver.dtos.ProjectDTO;
-import com.opensourcebim.bcfserver.models.Project;
+import com.opensourcebim.bcfserver.dtos.PageRequestDTO;
+import com.opensourcebim.bcfserver.dtos.project.ProjectDTO;
 import com.opensourcebim.bcfserver.services.ProjectService;
 import com.opensourcebim.bcfserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,8 +30,8 @@ public class ProjectController {
     //Getters
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<ProjectDTO>> getAllProjects(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public ResponseEntity<Page<ProjectDTO>> getAllProjects(@ModelAttribute PageRequestDTO request) {
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
         return ResponseEntity.ok(projectService.getAllProjects(pageable));
     }
 

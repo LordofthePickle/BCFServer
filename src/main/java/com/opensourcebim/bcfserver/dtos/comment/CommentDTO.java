@@ -1,9 +1,6 @@
-package com.opensourcebim.bcfserver.dtos;
+package com.opensourcebim.bcfserver.dtos.comment;
 
 import com.opensourcebim.bcfserver.models.Comment;
-import com.opensourcebim.bcfserver.models.Fragment;
-import com.opensourcebim.bcfserver.models.Project;
-import com.opensourcebim.bcfserver.models.User;
 
 public class CommentDTO {
     private String commentText;
