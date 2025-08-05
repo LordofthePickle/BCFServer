@@ -1,6 +1,7 @@
 package com.opensourcebim.bcfserver.controllers;
 
 import com.opensourcebim.bcfserver.dtos.CreationTimeDTO;
+import com.opensourcebim.bcfserver.dtos.CreationTimeRangeDTO;
 import com.opensourcebim.bcfserver.dtos.PageRequestDTO;
 import com.opensourcebim.bcfserver.dtos.user.*;
 import com.opensourcebim.bcfserver.models.User;
@@ -86,6 +87,14 @@ public class UserController {
                                                                    @ModelAttribute PageRequestDTO pageRequest) {
         Pageable pageable = PageRequest.of(pageRequest.getPage(), pageRequest.getSize(), Sort.by("creationTime").descending());
         return ResponseEntity.ok(userService.getUsersByCreationTimeBefore(request, pageable));
+    }
+
+    @GetMapping("/all/by_creationTime_Range")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<UserDTO>> getUsersByCreationTimeRange(@ModelAttribute CreationTimeRangeDTO request,
+                                                                     @ModelAttribute PageRequestDTO pageRequest) {
+        Pageable pageable = PageRequest.of(pageRequest.getPage(), pageRequest.getSize(), Sort.by("creationTime").descending());
+        return ResponseEntity.ok(userService.getUsersByCreationTimeRange(request, pageable));
     }
 
     //Putters

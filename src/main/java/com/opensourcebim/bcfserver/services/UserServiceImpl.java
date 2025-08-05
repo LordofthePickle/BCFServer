@@ -1,6 +1,7 @@
 package com.opensourcebim.bcfserver.services;
 
 import com.opensourcebim.bcfserver.dtos.CreationTimeDTO;
+import com.opensourcebim.bcfserver.dtos.CreationTimeRangeDTO;
 import com.opensourcebim.bcfserver.dtos.user.*;
 import com.opensourcebim.bcfserver.dtos.project.ProjectDTO;
 import com.opensourcebim.bcfserver.exceptions.EmailNotFoundException;
@@ -91,6 +92,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDTO> getUsersByCreationTimeBefore(CreationTimeDTO request, Pageable pageable){
         Page<User> userPage = userRepository.findByCreationTimeBefore(request.getCreationTime(), pageable);
+        return userPage.map(UserDTO::from);
+    }
+
+    @Override
+    public Page<UserDTO> getUsersByCreationTimeRange(CreationTimeRangeDTO request, Pageable pageable){
+        Page<User> userPage = userRepository.findByCreationTimeBetween(request.getCreationTimeStart(), request.getCreationTimeEnd(), pageable);
         return userPage.map(UserDTO::from);
     }
 

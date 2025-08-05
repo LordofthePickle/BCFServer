@@ -35,6 +35,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
    @NonNull
    Page<User> findByCreationTimeBefore(@NotNull LocalDateTime creationTime, Pageable pageable);
 
+   @NonNull
+   Page<User> findByCreationTimeBetween(@NotNull LocalDateTime creationTimeBefore, @NotNull LocalDateTime creationTimeAfter, Pageable pageable);
+
    @Override
    @NonNull
    Page<User> findAll(Pageable pageable);

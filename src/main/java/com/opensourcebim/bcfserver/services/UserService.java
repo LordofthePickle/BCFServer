@@ -35,6 +35,8 @@ public interface UserService {
 
     Page<UserDTO> getUsersByCreationTimeBefore(CreationTimeDTO request, Pageable pageable);
 
+    Page<UserDTO> getUsersByCreationTimeRange(CreationTimeRangeDTO request, Pageable pageable);
+
     Page<UserDTO> getAllUsers(Pageable pageable);
 
     List<ProjectDTO> getAllProjectsForCurrentUser();

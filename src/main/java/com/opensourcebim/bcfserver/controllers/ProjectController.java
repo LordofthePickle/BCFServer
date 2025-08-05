@@ -36,7 +36,6 @@ public class ProjectController {
     }
 
     @GetMapping("/myProjects")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ProjectDTO>> getProjectsForCurrentUser() {
         return ResponseEntity.ok(userService.getAllProjectsForCurrentUser());
     }
