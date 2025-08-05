@@ -97,6 +97,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsersByCreationTimeRange(request, pageable));
     }
 
+    @GetMapping("/all/by_lastLoginTime")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<UserDTO>> getAllUsersByLastLoginTime(@ModelAttribute PageRequestDTO request) {
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), Sort.by("lastLoginTime").descending());
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
+    }
+
     //Putters
 
     @PutMapping("/{uoid}/email")
